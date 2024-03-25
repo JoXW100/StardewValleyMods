@@ -1,22 +1,10 @@
 ﻿{
-  "Name": "Mobile Phone",
-  "Author": "aedenthorn",
+  "Name": "Mobile Phone Continued",
+  "Author": "JoXW, aedenthorn",
   "Version": "4.0.0",
   "Description": "Gives you a mobile phone.",
-  "UniqueID": "aedenthorn.MobilePhone",
+  "UniqueID": "JoXW.MobilePhone",
   "EntryDll": "MobilePhone.dll",
   "MinimumApiVersion": "4.0.0",
-  "UpdateKeys": [ "Nexus:6523" ],
-  "ModUpdater": {
-    "Repository": "StardewValleyMods",
-    "User": "aedenthorn",
-    "Directory": "_releases",
-    "ModFolder": "MobilePhone"
-  },
-  "Dependencies": [
-    {
-      "UniqueID": "Platonymous.ModUpdater",
-      "IsRequired": false
-    }
-  ]
+  "UpdateKeys": [ "Nexus:21017" ]
 }
