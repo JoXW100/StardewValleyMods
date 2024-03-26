@@ -1,0 +1,7 @@
+﻿{
+	"id": "aedenthorn.MobileJoysOfEfficiency",
+	"name": "Joys of Efficiency",
+	"iconPath": "assets/app_icon.png",
+    "keyPress": "R",
+	"closePhone": true
+}

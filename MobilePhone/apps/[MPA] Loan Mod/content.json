@@ -1,0 +1,7 @@
+﻿{
+	"id": "JoXW.MobileLoanMod",
+	"name": "Loan Mod",
+	"iconPath": "assets/app_icon.png",
+    "keyPress": "L",
+	"closePhone": true
+}

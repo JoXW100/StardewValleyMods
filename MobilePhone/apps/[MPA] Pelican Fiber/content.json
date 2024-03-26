@@ -1,0 +1,7 @@
+﻿{
+	"id": "aedenthorn.MobilePelicanFiber",
+	"name": "PelicanFiber",
+	"iconPath": "assets/app_icon.png",
+    "keyPress": "PageUp",
+	"closePhone": true
+}

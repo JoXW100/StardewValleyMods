@@ -1,0 +1,22 @@
+﻿{
+	"Name": "Mobile Phone App for CJB Item Spawner",
+	"Author": "JoXW, aedenthorn",
+	"Version": "0.1.1",
+	"Description": "Adds an app that triggers the default key for CJB Item Spawner.",
+	"UniqueID": "JoXW.MobileCJBItemSpawner",
+	"MinimumApiVersion": "4.0.0",
+	"ContentPackFor": {
+		"UniqueID": "JoXW.MobilePhone",
+		"MinimumVersion": "1.0.0"
+	},
+	"Dependencies": [
+		{
+			"UniqueID": "CJBok.ItemSpawner",
+			"IsRequired": true
+		},
+		{
+			"UniqueID": "JoXW.MobilePhone",
+			"IsRequired": true
+		}
+	]
+}

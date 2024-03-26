@@ -1,0 +1,7 @@
+﻿{
+	"id": "aedenthorn.MobileTMXL",
+	"name": "TMXL Map Toolkit",
+	"iconPath": "assets/app_icon.png",
+    "keyPress": "F2",
+	"closePhone": true
+}

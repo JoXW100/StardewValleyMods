@@ -1,0 +1,7 @@
+﻿{
+	"id": "aedenthorn.MobileCJBCheatsMenu",
+	"name": "Mobile CJB Cheats Menu",
+	"iconPath": "assets/app_icon.png",
+    "keyPress": "P",
+	"closePhone": true
+}

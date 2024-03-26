@@ -1,0 +1,7 @@
+﻿{
+	"id": "aedenthorn.MobileCJBItemSpawnerMenu",
+	"name": "Mobile CJB Item Spawner Menu",
+	"iconPath": "assets/app_icon.png",
+    "keyPress": "I",
+	"closePhone": true
+}

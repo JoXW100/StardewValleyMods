@@ -1,0 +1,7 @@
+﻿{
+	"id": "aedenthorn.MobileGetGlam",
+	"name": "Get Glam",
+	"iconPath": "assets/app_icon.png",
+    "keyPress": "C",
+	"closePhone": true
+}

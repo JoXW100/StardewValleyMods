@@ -1,0 +1,22 @@
+﻿{
+    "Name": "Mobile Phone App for CJB Cheats",
+    "Author": "JoXW, aedenthorn",
+    "Version": "0.1.2",
+    "Description": "Adds an app that triggers the default key for CJB Cheats Menu.",
+    "UniqueID": "JoXW.MobileCJBCheats",
+    "MinimumApiVersion": "4.0.0",
+    "ContentPackFor": {
+        "UniqueID": "JoXW.MobilePhone",
+        "MinimumVersion": "1.0.0"
+    },
+    "Dependencies": [
+        {
+            "UniqueID": "CJBok.CheatsMenu",
+            "IsRequired": true
+        },
+        {
+            "UniqueID": "JoXW.MobilePhone",
+            "IsRequired": true
+        }
+    ]
+}
