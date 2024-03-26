@@ -1,25 +1,19 @@
 ﻿{
-  "Name": "Mobile Calendar",
-  "Author": "aedenthorn",
-  "Version": "0.3.1",
+  "Name": "Mobile Calendar Continued",
+  "Author": "JoXW",
+  "Version": "1.0.0",
   "Description": "A Calendar app for your mobile phone.",
-  "UniqueID": "aedenthorn.MobileCalendar",
+  "UniqueID": "JoXW.MobileCalendar",
   "EntryDll": "MobileCalendar.dll",
-  "MinimumApiVersion": "3.13.0",
-  "UpdateKeys": [ "Nexus:6601" ],
-  "ModUpdater": {
-    "Repository": "StardewValleyMods",
-    "User": "aedenthorn",
-    "Directory": "_releases",
-    "ModFolder": "MobileCalendar"
-  },
+  "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": [ "Nexus:21017@MobileCalendarApp" ],
   "Dependencies": [
     {
       "UniqueID": "Platonymous.ModUpdater",
       "IsRequired": false
     },
     {
-      "UniqueID": "aedenthorn.MobilePhone",
+      "UniqueID": "JoXW.MobilePhone",
       "IsRequired": true
     }
   ]
