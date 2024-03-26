@@ -29,7 +29,7 @@ namespace MobileArcade
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("aedenthorn.MobilePhone");
+            api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("JoXW.MobilePhone");
             if (api != null)
             {
                 // Prairie King load.
@@ -47,7 +47,7 @@ namespace MobileArcade
         private void OpenPrairieKing()
         {
             api.SetPhoneOpened(false);
-            Game1.currentMinigame = new AbigailGame(false);
+            Game1.currentMinigame = new AbigailGame(null);
         }
 
         private void OpenJunimoKart()
