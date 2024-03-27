@@ -32,14 +32,14 @@ namespace MobileCatalogues
         }
         public static void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            ModEntry.api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("aedenthorn.MobilePhone");
+            ModEntry.api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("JoXW.MobilePhone");
             if (ModEntry.api != null)
             {
                 api = ModEntry.api;
                 Texture2D appIcon;
                 bool success;
 
-                appIcon = Helper.Content.Load<Texture2D>(Path.Combine("assets", "app_icon.png"));
+                appIcon = Helper.ModContent.Load<Texture2D>(Path.Combine("assets", "app_icon.png"));
                 success = ModEntry.api.AddApp(Helper.ModRegistry.ModID + "Catalogues", Helper.Translation.Get("catalogues"), CataloguesApp.OpenCatalogueApp, appIcon);
                 Monitor.Log($"loaded catalogues app successfully: {success}", LogLevel.Debug);
 

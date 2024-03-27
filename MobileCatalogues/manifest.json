@@ -1,25 +1,18 @@
 ﻿{
   "Name": "Mobile Catalogues",
-  "Author": "aedenthorn",
-  "Version": "0.9.1",
+  "Author": "JoXW, aedenthorn",
+  "Version": "1.0.0",
   "Description": "Online shopping for your mobile phone.",
-  "UniqueID": "aedenthorn.MobileCatalogues",
+  "UniqueID": "JoXW.MobileCatalogues",
   "EntryDll": "MobileCatalogues.dll",
-  "MinimumApiVersion": "3.13.0",
-  "UpdateKeys": [ "Nexus:6543" ],
-  "ModUpdater": {
-    "Repository": "StardewValleyMods",
-    "User": "aedenthorn",
-    "Directory": "_releases",
-    "ModFolder": "MobileCatalogues"
-  },
+  "MinimumApiVersion": "4.0.0",
   "Dependencies": [
     {
       "UniqueID": "Platonymous.ModUpdater",
       "IsRequired": false
     },
     {
-      "UniqueID": "aedenthorn.MobilePhone",
+      "UniqueID": "JoXW.MobilePhone",
       "IsRequired": true
     }
   ]

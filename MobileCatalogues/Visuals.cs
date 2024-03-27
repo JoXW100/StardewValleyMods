@@ -66,7 +66,7 @@ namespace MobileCatalogues
             }
             texture.SetData(data);
             headerTexture = texture;
-            coinTexture = Helper.Content.Load<Texture2D>(Path.Combine("assets", "coin.png"));
+            coinTexture = Helper.ModContent.Load<Texture2D>(Path.Combine("assets", "coin.png"));
 
         }
 
