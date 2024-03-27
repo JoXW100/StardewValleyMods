@@ -40,12 +40,12 @@ namespace MobileTelevision
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("aedenthorn.MobilePhone");
+            api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("JoXW.MobilePhone");
             if (api != null)
             {
                 Texture2D appIcon;
                 bool success;
-                appIcon = Helper.Content.Load<Texture2D>(Path.Combine("assets", "app_icon.png"));
+                appIcon = Helper.ModContent.Load<Texture2D>(Path.Combine("assets", "app_icon.png"));
                 success = api.AddApp(Helper.ModRegistry.ModID, Helper.Translation.Get("television"), OpenTelevision, appIcon);
                 Monitor.Log($"loaded app successfully: {success}", LogLevel.Debug);
             }
@@ -62,7 +62,7 @@ namespace MobileTelevision
         {
             await Task.Delay(50);
             Monitor.Log("Really opening television");
-            tv = new MobileTV(1468, new Vector2((Game1.viewport.X + Game1.viewport.Width / 2 - Game1.tileSize) / Game1.tileSize,(Game1.viewport.Y + Game1.viewport.Height / 2 - Game1.tileSize) / Game1.tileSize));
+            tv = new MobileTV("1468", new Vector2((Game1.viewport.X + Game1.viewport.Width / 2 - Game1.tileSize) / Game1.tileSize,(Game1.viewport.Y + Game1.viewport.Height / 2 - Game1.tileSize) / Game1.tileSize));
             tv.checkForAction(Game1.player);
         }
 

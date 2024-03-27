@@ -1,26 +1,19 @@
 ﻿{
-  "Name": "Mobile Television",
-  "Author": "aedenthorn",
-  "Version": "0.2.2",
+  "Name": "Mobile Television Continued",
+  "Author": "JoXW",
+  "Version": "1.0.0",
   "Description": "Television for your mobile phone.",
-  "UniqueID": "aedenthorn.MobileTelevision",
+  "UniqueID": "JoXW.MobileTelevision",
   "EntryDll": "MobileTelevision.dll",
-  "MinimumApiVersion": "3.13.0",
-  "UpdateKeys": ["Nexus:6575"],
-  "ModUpdater": {
-    "Repository": "StardewValleyMods",
-    "User": "aedenthorn",
-    "Directory": "_releases",
-    "ModFolder": "MobileTelevision"
-  },
+  "MinimumApiVersion": "4.0.0",
   "Dependencies": [
-      {
-        "UniqueID": "Platonymous.ModUpdater",
-        "IsRequired": false
-      },
-      {
-        "UniqueID": "aedenthorn.MobilePhone",
-        "IsRequired": true
-      },
+    {
+      "UniqueID": "Platonymous.ModUpdater",
+      "IsRequired": false
+    },
+    {
+      "UniqueID": "JoXW.MobilePhone",
+      "IsRequired": true
+    }
   ]
 }

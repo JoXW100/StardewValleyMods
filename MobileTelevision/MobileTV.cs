@@ -9,7 +9,7 @@ namespace MobileTelevision
 {
     public class MobileTV : TV
     {
-        public MobileTV(int which, Vector2 tile) : base(which, tile)
+        public MobileTV(string itemId, Vector2 tile) : base(itemId, tile)
         {
 
             Vector2 ps = ModEntry.api.GetScreenSize(false);
