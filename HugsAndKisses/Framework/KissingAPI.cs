@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using StardewValley;
 
-namespace HugsAndKisses
+namespace HugsAndKisses.Framework
 {
     public class KissingAPI
     {

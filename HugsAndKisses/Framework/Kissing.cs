@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HugsAndKisses
+namespace HugsAndKisses.Framework
 {
     /// <summary>The mod entry point.</summary>
     public class Kissing
@@ -29,7 +29,7 @@ namespace HugsAndKisses
         public static void TrySpousesKiss(GameLocation location)
         {
 
-            if ( location == null || Game1.eventUp || Game1.activeClickableMenu != null || Game1.player.currentLocation != location || (!Config.AllowNPCSpousesToKiss && !Config.AllowPlayerSpousesToKiss && !Config.AllowNPCRelativesToHug))
+            if (location == null || Game1.eventUp || Game1.activeClickableMenu != null || Game1.player.currentLocation != location || !Config.AllowNPCSpousesToKiss && !Config.AllowPlayerSpousesToKiss && !Config.AllowNPCRelativesToHug)
                 return;
 
             elapsedSeconds++;
@@ -63,7 +63,7 @@ namespace HugsAndKisses
 
                     bool npcRelatedHug = Misc.AreNPCsRelated(npc1.Name, npc2.Name) && Config.AllowNPCRelativesToHug;
                     bool npcRoommateHug = !Config.RoommateKisses && (npc1.isRoommate() || npc2.isRoommate());
-                    
+
                     bool npcMarriageKiss = Misc.AreNPCsMarried(npc1.Name, npc2.Name) && Config.AllowNPCSpousesToKiss;
                     bool playerSpouseKiss = Config.AllowPlayerSpousesToKiss &&
                         npc1.getSpouse() != null && npc2.getSpouse() != null &&
@@ -103,7 +103,7 @@ namespace HugsAndKisses
                         {
                             if (Config.CustomKissSound.Length > 0 && kissEffect != null)
                             {
-                                float playerDistance = 1f / ((Vector2.Distance(midpoint, Game1.player.position.Value) / 256) + 1);
+                                float playerDistance = 1f / (Vector2.Distance(midpoint, Game1.player.position.Value) / 256 + 1);
                                 kissEffect.Play(playerDistance * Game1.options.soundVolumeLevel, 0, 0);
                             }
                             else
@@ -118,7 +118,7 @@ namespace HugsAndKisses
                         {
                             if (Config.CustomHugSound.Length > 0 && hugEffect != null)
                             {
-                                float playerDistance = 1f / ((Vector2.Distance(midpoint, Game1.player.position.Value) / 256) + 1);
+                                float playerDistance = 1f / (Vector2.Distance(midpoint, Game1.player.position.Value) / 256 + 1);
                                 hugEffect.Play(playerDistance * Game1.options.soundVolumeLevel, 0, 0);
                             }
                             Misc.ShowSmiley(npc1);
@@ -148,6 +148,7 @@ namespace HugsAndKisses
             PerformEmbrace(npc1, midpoint, npc2.Name);
             PerformEmbrace(npc2, midpoint, npc1.Name);
         }
+
         private static void PerformEmbrace(NPC npc, Vector2 midpoint, string partner)
         {
             string name = npc.Name;
@@ -155,7 +156,7 @@ namespace HugsAndKisses
             bool facingRight = Misc.GetFacingRight(name);
 
             List<string> customFrames = Config.CustomKissFrames.Split(',').ToList();
-            foreach(string nameframe in customFrames)
+            foreach (string nameframe in customFrames)
             {
                 if (nameframe.StartsWith(name + ":"))
                 {
@@ -163,35 +164,34 @@ namespace HugsAndKisses
                     break;
                 }
             }
-            
+
 
             bool right = npc.position.X < midpoint.X;
-            if(npc.position.Value == midpoint)
+            if (npc.position.Value == midpoint)
             {
-                right = String.Compare(npc.Name, partner) < 0;
+                right = string.Compare(npc.Name, partner) < 0;
             }
-            else if(npc.position.X == midpoint.X)
+            else if (npc.position.X == midpoint.X)
             {
                 right = npc.position.Y > midpoint.Y;
             }
 
-            bool flip = (facingRight && !right) || (!facingRight && right);
+            bool flip = facingRight && !right || !facingRight && right;
 
             int offset = 24;
             if (right)
                 offset *= -1;
 
-            npc.position.Value = new Vector2(midpoint.X+offset,midpoint.Y);
+            npc.position.Value = new Vector2(midpoint.X + offset, midpoint.Y);
 
             int delay = 1000;
             npc.movementPause = delay;
             npc.Sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>
-                {
-                    new FarmerSprite.AnimationFrame(spouseFrame, delay, false, flip, new AnimatedSprite.endOfAnimationBehavior(npc.haltMe), true)
-                });
+            {
+                new (spouseFrame, delay, false, flip, new AnimatedSprite.endOfAnimationBehavior(npc.haltMe), true)
+            });
             npc.Sprite.UpdateSourceRect();
         }
-
 
         public static void PlayerNPCKiss(Farmer player, NPC npc)
         {
@@ -199,7 +199,7 @@ namespace HugsAndKisses
             int spouseFrame = Misc.GetKissingFrame(name);
             bool facingRight = Misc.GetFacingRight(name);
 
-            bool flip = (facingRight && npc.FacingDirection == 3) || (!facingRight && npc.FacingDirection == 1);
+            bool flip = facingRight && npc.FacingDirection == 3 || !facingRight && npc.FacingDirection == 1;
             if (!player.friendshipData.TryGetValue(npc.Name, out Friendship f))
             {
                 ModEntry.SMonitor.Log($"{player.Name} has no friendship data for {npc.Name}");
@@ -213,7 +213,7 @@ namespace HugsAndKisses
             }
 
             bool accepted = true;
-            if (f.IsMarried() || f.IsEngaged()) 
+            if (f.IsMarried() || f.IsEngaged())
             {
                 if (player.getFriendshipHeartLevelForNPC(npc.Name) < Config.MinHeartsForMarriageKiss)
                 {
@@ -234,10 +234,9 @@ namespace HugsAndKisses
                 int delay = Game1.IsMultiplayer ? 1000 : 10;
                 npc.movementPause = delay;
                 npc.Sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>
-                    {
-                        new FarmerSprite.AnimationFrame(spouseFrame, delay, false, flip, new AnimatedSprite.endOfAnimationBehavior(npc.haltMe), true)
-                    }
-                );
+                {
+                    new (spouseFrame, delay, false, flip, new AnimatedSprite.endOfAnimationBehavior(npc.haltMe), true)
+                });
                 if (!npc.hasBeenKissedToday.Value)
                 {
                     player.changeFriendship(10, npc);
@@ -272,11 +271,11 @@ namespace HugsAndKisses
             {
                 ModEntry.SMonitor.Log($"Kiss/hug rejected by {npc.Name}");
 
-                npc.faceDirection((ModEntry.myRand.NextDouble() < 0.5) ? 2 : 0);
+                npc.faceDirection(ModEntry.myRand.NextDouble() < 0.5 ? 2 : 0);
                 npc.doEmote(12, true);
             }
             int playerFaceDirection = 1;
-            if ((facingRight && !flip) || (!facingRight && flip))
+            if (facingRight && !flip || !facingRight && flip)
             {
                 playerFaceDirection = 3;
             }
@@ -289,17 +288,16 @@ namespace HugsAndKisses
             int spouseFrame = Misc.GetKissingFrame(name);
             bool facingRight = Misc.GetFacingRight(name);
 
-            bool flip = (facingRight && npc.FacingDirection == 3) || (!facingRight && npc.FacingDirection == 1);
+            bool flip = facingRight && npc.FacingDirection == 3 || !facingRight && npc.FacingDirection == 1;
 
             ModEntry.SMonitor.Log($"Can hug {npc.Name}");
 
             int delay = Game1.IsMultiplayer ? 1000 : 10;
             npc.movementPause = delay;
             npc.Sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>
-                    {
-                        new FarmerSprite.AnimationFrame(spouseFrame, delay, false, flip, new AnimatedSprite.endOfAnimationBehavior(npc.haltMe), true)
-                    }
-            );
+            {
+                new (spouseFrame, delay, false, flip, new AnimatedSprite.endOfAnimationBehavior(npc.haltMe), true)
+            });
 
             ModEntry.SMonitor.Log($"Hugging {npc.Name}");
             Misc.ShowSmiley(npc);
@@ -312,7 +310,7 @@ namespace HugsAndKisses
             npc.Sprite.UpdateSourceRect();
 
             int playerFaceDirection = 1;
-            if ((facingRight && !flip) || (!facingRight && flip))
+            if (facingRight && !flip || !facingRight && flip)
             {
                 playerFaceDirection = 3;
             }

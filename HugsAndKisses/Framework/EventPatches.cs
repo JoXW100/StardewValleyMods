@@ -2,7 +2,7 @@
 using StardewValley;
 using System;
 
-namespace HugsAndKisses
+namespace HugsAndKisses.Framework
 {
     public static class EventPatches
     {

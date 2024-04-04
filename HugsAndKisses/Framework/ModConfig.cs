@@ -1,5 +1,4 @@
-﻿
-namespace HugsAndKisses
+﻿namespace HugsAndKisses.Framework
 {
     public class ModConfig
     {

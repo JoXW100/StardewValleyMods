@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using HugsAndKisses.Framework;
+using HugsAndKisses.Interfaces;
+using Microsoft.Xna.Framework.Audio;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -10,8 +12,6 @@ namespace HugsAndKisses
     /// <summary>The mod entry point.</summary>
     public partial class ModEntry
     {
-
-
         public void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
             if (!Config.EnableMod)

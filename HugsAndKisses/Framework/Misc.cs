@@ -5,7 +5,7 @@ using StardewValley.GameData.Characters;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HugsAndKisses
+namespace HugsAndKisses.Framework
 {
     /// <summary>The mod entry point.</summary>
     public class Misc
@@ -147,10 +147,10 @@ namespace HugsAndKisses
 
         public static void ResetSpouses(Farmer f)
         {
-            Dictionary<string, NPC> spouses = GetSpouses(f,1);
+            Dictionary<string, NPC> spouses = GetSpouses(f, 1);
             if (f.spouse == null)
             {
-                if(spouses.Count > 0)
+                if (spouses.Count > 0)
                 {
                     Monitor.Log("No official spouse, setting official spouse to: " + spouses.First().Key);
                     f.spouse = spouses.First().Key;
@@ -167,7 +167,7 @@ namespace HugsAndKisses
                         Monitor.Log("invalid engagement: " + name);
                         f.friendshipData[name].WeddingDate.TotalDays = new WorldDate(Game1.Date).TotalDays + 1;
                     }
-                    if(f.spouse != name)
+                    if (f.spouse != name)
                     {
                         Monitor.Log("setting spouse to engagee: " + name);
                         f.spouse = name;
@@ -193,7 +193,7 @@ namespace HugsAndKisses
         {
             ModEntry.relationships.Clear();
             var characters = Helper.GameContent.Load<Dictionary<string, CharacterData>>("Data/Characters");
-            
+
             foreach (var (Key, Value) in characters)
             {
                 ModEntry.relationships[Key] = Value.FriendsAndFamily;
@@ -227,7 +227,7 @@ namespace HugsAndKisses
             "grandniece",
             "grandnephew"
         };
-        
+
         public static string[] spouseRoles = new string[]
         {
             "husband",
@@ -264,7 +264,7 @@ namespace HugsAndKisses
             }
             return false;
         }
-        
+
         public static bool AreNPCsRelated(string npc1, string npc2)
         {
             if (ModEntry.relationships.ContainsKey(npc1) && ModEntry.relationships[npc1].ContainsKey(npc2))
@@ -305,7 +305,7 @@ namespace HugsAndKisses
                 list[n] = value;
             }
         }
-        public static void ShuffleDic<T1,T2>(ref Dictionary<T1,T2> list)
+        public static void ShuffleDic<T1, T2>(ref Dictionary<T1, T2> list)
         {
             int n = list.Count;
             while (n > 1)
