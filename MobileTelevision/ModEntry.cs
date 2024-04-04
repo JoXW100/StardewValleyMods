@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -55,16 +56,21 @@ namespace MobileTelevision
         {
             Monitor.Log("Opening Television");
             DelayedOpen();
-            
         }
 
         private async void DelayedOpen()
         {
-            await Task.Delay(50);
-            Monitor.Log("Really opening television");
-            tv = new MobileTV("1468", new Vector2((Game1.viewport.X + Game1.viewport.Width / 2 - Game1.tileSize) / Game1.tileSize,(Game1.viewport.Y + Game1.viewport.Height / 2 - Game1.tileSize) / Game1.tileSize));
-            tv.checkForAction(Game1.player);
+            try
+            {
+                await Task.Delay(50);
+                Monitor.Log("Really opening television");
+                tv = new MobileTV("1468", new Vector2((Game1.viewport.X + Game1.viewport.Width / 2 - Game1.tileSize) / Game1.tileSize, (Game1.viewport.Y + Game1.viewport.Height / 2 - Game1.tileSize) / Game1.tileSize));
+                tv.checkForAction(Game1.player);
+            }
+            catch (Exception e)
+            {
+                Monitor.Log($"Error occured in '{nameof(ModEntry)}.{nameof(DelayedOpen)}': {e.Message}", LogLevel.Error);
+            }
         }
-
     }
 }
