@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Objects;
-using System;
 using System.Reflection;
 
 namespace MobileTelevision
@@ -22,9 +21,13 @@ namespace MobileTelevision
             while(i < data.Length || i < data2.Length)
             {
                 if (i < data.Length)
+                {
                     data[i] = Color.Black;
+                }
                 if (i < data2.Length)
+                {
                     data2[i] = Color.Black;
+                }
                 i++;
             }
             backgroundTexture.SetData(data);
@@ -50,7 +53,6 @@ namespace MobileTelevision
             else
             {
                 ModEntry.context.Monitor.Log($"portrait");
-
                 result = ModEntry.api.GetScreenPosition() + new Vector2(0, phoneScreenSize.Y / 2f - screenSize.Y / 2f);
             }
             boundingBox.Value = new Rectangle((int)result.X, (int)result.Y, (int)screenSize.X, (int)screenSize.Y);

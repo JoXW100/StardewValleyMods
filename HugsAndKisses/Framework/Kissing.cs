@@ -29,7 +29,7 @@ namespace HugsAndKisses.Framework
         public static void TrySpousesKiss(GameLocation location)
         {
 
-            if (location == null || Game1.eventUp || Game1.activeClickableMenu != null || Game1.player.currentLocation != location || !Config.AllowNPCSpousesToKiss && !Config.AllowPlayerSpousesToKiss && !Config.AllowNPCRelativesToHug)
+            if (location == null || Game1.eventUp || Game1.activeClickableMenu != null || Game1.player.currentLocation != location || (!Config.AllowNPCSpousesToKiss && !Config.AllowPlayerSpousesToKiss && !Config.AllowNPCRelativesToHug))
                 return;
 
             elapsedSeconds++;
