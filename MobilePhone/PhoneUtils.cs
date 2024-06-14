@@ -22,6 +22,45 @@ namespace MobilePhone
             Config = config;
         }
 
+        public static Dictionary<string, CustomNPCData> LoadNPCDict()
+        {
+            Dictionary<string, CustomNPCData> npcDict = new();
+
+            try
+            {
+                var data = Helper.GameContent.Load<Dictionary<string, CustomNPCData>>(ModEntry.npcDictPath);
+                foreach (var item in data) 
+                {
+                    if (!npcDict.TryAdd(item.Key, item.Value))
+                    {
+                        npcDict[item.Key].reminisces.AddRange(item.Value.reminisces);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Monitor.Log($"Failed to find callable npc dict at: {ModEntry.npcDictPath}, trying another path...", LogLevel.Warn);
+            }
+
+            try
+            {
+                var data = Helper.GameContent.Load<Dictionary<string, CustomNPCData>>(ModEntry.oldNPCDictPath);
+                foreach (var item in data)
+                {
+                    if (!npcDict.TryAdd(item.Key, item.Value))
+                    {
+                        npcDict[item.Key].reminisces.AddRange(item.Value.reminisces);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Monitor.Log($"Failed to find callable npc dict at: {ModEntry.oldNPCDictPath}", LogLevel.Warn);
+            }
+
+            return npcDict;
+        }
+
         public static void RotatePhone()
         {
             ModEntry.phoneRotated = !ModEntry.phoneRotated;
@@ -43,6 +82,7 @@ namespace MobilePhone
                 Monitor.Log($"Opening phone");
             }
         }
+
         public static void TogglePhone()
         {
             if(ModEntry.phoneOpen && ModEntry.appRunning)
@@ -187,6 +227,7 @@ namespace MobilePhone
                 Monitor.Log($"Couldn't play ring sound {tone}: {ex}", LogLevel.Error);
             }
         }
+
         public static void StopRingTone()
         {
             string tone = Config.PhoneRingTone;
@@ -286,6 +327,7 @@ namespace MobilePhone
             }
 
         }
+
         public static Vector2 GetPhoneIconPosition()
         {
             int x = 0;
@@ -351,6 +393,7 @@ namespace MobilePhone
                 return new Vector2(Config.ScreenWidth, Config.ScreenHeight);
             }
         }
+
         public static Vector2 GetScreenSize(bool rotated)
         {
             if (rotated)
@@ -361,6 +404,21 @@ namespace MobilePhone
             {
                 return new Vector2(Config.ScreenWidth, Config.ScreenHeight);
             }
+        }
+
+        public static Rectangle ScaleRect(float X, float Y, float W, float H, float scale)
+        {
+            return new Rectangle((int)(X * scale), (int)(Y * scale), (int)(W * scale), (int)(H * scale));
+        }
+
+        public static Rectangle ScaleRect(int X, int Y, int W, int H, float scale)
+        {
+            return new Rectangle((int)(X * scale), (int)(Y * scale), (int)(W * scale), (int)(H * scale));
+        }
+
+        public static Rectangle ScaleRect(Rectangle rect, float scale)
+        {
+            return new Rectangle((int)(rect.X * scale), (int)(rect.Y * scale), (int)(rect.Width * scale), (int)(rect.Height * scale));
         }
 
         public static Vector2 GetAppPos(int i, bool initial = false)
@@ -389,6 +447,7 @@ namespace MobilePhone
 
             return new Point(x, y);
         }
+
         public static void GetArrowPositions()
         {
             ModEntry.upArrowPosition = new Vector2(ModEntry.screenPosition.X + ModEntry.screenWidth - Config.ContactArrowWidth, ModEntry.screenPosition.Y + Config.AppHeaderHeight);
