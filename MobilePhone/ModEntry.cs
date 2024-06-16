@@ -272,11 +272,9 @@ namespace MobilePhone
                     {
                         foreach (EventFork fork in invite.forks)
                         {
-                            var f = fork;
                             e.Edit(delegate (IAssetData obj) {
                                 var dict = obj.AsDictionary<string, string>();
                                 dict.Data.Add(fork.key, MobilePhoneCall.CreateEventString(fork.nodes, invitedNPC));
-
                             });
                         }
                     }

@@ -7,6 +7,9 @@ namespace MapTeleport
 {
     public interface IMobilePhoneApi
     {
+        event EventHandler<StardewModdingAPI.Events.RenderedWorldEventArgs> OnBeforeRenderScreen;
+        event EventHandler<StardewModdingAPI.Events.RenderedWorldEventArgs> OnAfterRenderScreen;
+
         bool AddApp(string id, string name, Action action, Texture2D icon);
         Vector2 GetRawScreenPosition();
         Vector2 GetRawScreenSize();

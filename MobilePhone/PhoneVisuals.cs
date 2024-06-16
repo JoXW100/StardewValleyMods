@@ -30,7 +30,7 @@ namespace MobilePhone
 
         public static void Display_RenderedWorld(object sender, StardewModdingAPI.Events.RenderedWorldEventArgs e)
         {
-            float ratio = Game1.options.zoomLevel != 1f ? 1f : 1f / Game1.options.uiScale;
+            float ratio = PhoneUtils.GetUIRatio();
             var mousePos = Game1.getMousePosition();
             Point lastMousePos = ModEntry.lastMousePosition;
             ModEntry.lastMousePosition = mousePos;
@@ -66,26 +66,30 @@ namespace MobilePhone
                             ModEntry.draggingPhoneIcon = false;
                         }
                     }
+
                     float rot = 0;
                     int speed = 3;
                     if (ModEntry.callingNPC != null && Config.VibratePhoneIcon)
                     {
-                        ringingTicks++;
-
-                        rot = ringingTicks % (speed * 4);
+                        rot = (++ringingTicks) % (speed * 4);
                         if (rot < speed)
+                        {
                             rot *= -1;
+                        }
                         else if (rot < speed * 3)
+                        {
                             rot -= speed * 2;
+                        }
                         else
+                        {
                             rot = speed * 4 - rot;
+                        }
                         rot /= 20f;
                     }
                     else
                     {
                         ringingTicks = 0;
                     }
-
 
                     Vector2 pos = new Vector2((int)ModEntry.phoneIconPosition.X + ModEntry.phoneTexture.Width / 20, (int)ModEntry.phoneIconPosition.Y + ModEntry.phoneTexture.Height / 20) * ratio;
                     e.SpriteBatch.Draw(ModEntry.backgroundTexture, pos, null, Color.White, rot, new Vector2(ModEntry.phoneTexture.Width / 2, ModEntry.phoneTexture.Height / 2), 0.1f * ratio, SpriteEffects.None, 0.86f);
@@ -259,12 +263,14 @@ namespace MobilePhone
 
             if (ModEntry.appRunning)
             {
+                OnAfterRenderScreen?.Invoke(sender, e);
                 return;
             }
 
             if (ModEntry.runningApp == Helper.ModRegistry.ModID && Game1.activeClickableMenu == null)
             {
                 MobilePhoneApp.OpenPhoneBook();
+                OnAfterRenderScreen?.Invoke(sender, e);
                 return;
             }
 

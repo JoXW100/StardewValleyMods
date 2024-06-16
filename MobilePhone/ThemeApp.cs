@@ -57,6 +57,7 @@ namespace MobilePhone
             PhoneVisuals.OnAfterRenderScreen += Display_RenderedWorld;
             Helper.Events.Input.ButtonPressed += Input_ButtonPressed;
         }
+
         private static void CreateThemeLists()
         {
 
@@ -232,12 +233,12 @@ namespace MobilePhone
             if (!ModEntry.appRunning || !ModEntry.phoneOpen || ModEntry.runningApp != Helper.ModRegistry.ModID)
             {
                 ModEntry.appRunning = false;
-                Helper.Events.Display.RenderedWorld -= Display_RenderedWorld;
+                PhoneVisuals.OnAfterRenderScreen -= Display_RenderedWorld;
                 Helper.Events.Input.ButtonPressed -= Input_ButtonPressed;
                 return;
             }
 
-            float ratio = Game1.options.zoomLevel != 1f ? 1f : 1f / Game1.options.uiScale;
+            float ratio = PhoneUtils.GetUIRatio();
             Vector2 screenPos = PhoneUtils.GetScreenPosition();
             Vector2 screenSize = PhoneUtils.GetScreenSize();
             Rectangle headerRect = PhoneUtils.ScaleRect(screenPos.X, screenPos.Y, screenSize.X, Config.AppHeaderHeight, ratio);
@@ -379,10 +380,9 @@ namespace MobilePhone
                 Vector2 itemPos = GetItemPos(i);
                 if (whichTab < 2)
                 {
-                    Rectangle r = new Rectangle(0,0,Config.PhoneWidth, Config.PhoneHeight);
+                    Rectangle r = new Rectangle(0, 0, Config.PhoneWidth, Config.PhoneHeight);
                     Rectangle sourceRect = r;
-                    Rectangle destRect;
-                    destRect = new Rectangle((int)itemPos.X, (int)itemPos.Y, Config.ThemeItemWidth, Config.ThemeItemHeight);
+                    Rectangle destRect = new Rectangle((int)itemPos.X, (int)itemPos.Y, Config.ThemeItemWidth, Config.ThemeItemHeight);
                     float yScale = Config.ThemeItemHeight / (float)Config.PhoneHeight;
                     if (itemPos.Y < startListY - r.Height * yScale || itemPos.Y >= screenBottom)
                     {
@@ -428,6 +428,7 @@ namespace MobilePhone
                     e.SpriteBatch.DrawString(Game1.dialogueFont, itemName, itemPos * ratio, Config.RingListItemColor, 0, Vector2.Zero, Config.RingListItemScale * ratio, SpriteEffects.None, 0.86f);
                 }
             }
+
             e.SpriteBatch.Draw(ModEntry.themesHeaderTexture, headerRect, Color.White);
             e.SpriteBatch.Draw(ModEntry.themesHeaderTexture, footerRect, Color.White);
             e.SpriteBatch.Draw(ModEntry.themesHighlightTexture, PhoneUtils.ScaleRect(screenPos.X + (screenSize.X / 3f ) * whichTab, screenBottom - Config.AppHeaderHeight, screenSize.X / 3f, Config.AppHeaderHeight, ratio), Color.White);

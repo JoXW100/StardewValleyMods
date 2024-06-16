@@ -46,7 +46,7 @@ namespace MobilePhone
             ModEntry.runningApp = Helper.ModRegistry.ModID;
             CreateCallableList();
             listHeight = Config.ContactMarginY + (int)Math.Ceiling(callableList.Count / (float)ModEntry.gridWidth) * (Config.ContactHeight + Config.ContactMarginY);
-            Helper.Events.Display.RenderedWorld += Display_RenderedWorld;
+            PhoneVisuals.OnAfterRenderScreen += Display_RenderedWorld;
             Helper.Events.Input.ButtonPressed += Input_ButtonPressed;
             Helper.Events.Input.MouseWheelScrolled += Input_MouseWheelScrolled;
         }
@@ -154,7 +154,7 @@ namespace MobilePhone
             {
                 ModEntry.appRunning = false;
                 ModEntry.phoneAppRunning = false;
-                Helper.Events.Display.RenderedWorld -= Display_RenderedWorld;
+                PhoneVisuals.OnAfterRenderScreen -= Display_RenderedWorld;
                 Helper.Events.Input.ButtonPressed -= Input_ButtonPressed;
                 Helper.Events.Input.MouseWheelScrolled -= Input_MouseWheelScrolled;
                 return;

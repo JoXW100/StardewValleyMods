@@ -74,7 +74,6 @@ namespace MobilePhone
             Game1.playSound("dwop");
             if (!value)
             {
-                Monitor.Log($"Closing phone");
                 ModEntry.appRunning = false;
             }
             else
@@ -452,6 +451,11 @@ namespace MobilePhone
         {
             ModEntry.upArrowPosition = new Vector2(ModEntry.screenPosition.X + ModEntry.screenWidth - Config.ContactArrowWidth, ModEntry.screenPosition.Y + Config.AppHeaderHeight);
             ModEntry.downArrowPosition = new Vector2(ModEntry.screenPosition.X + ModEntry.screenWidth - Config.ContactArrowWidth, ModEntry.screenPosition.Y + ModEntry.screenHeight - Config.ContactArrowHeight);
+        }
+
+        public static float GetUIRatio()
+        {
+            return Game1.options.zoomLevel != 1f ? 1f : 1f / Game1.options.uiScale;
         }
 
         public static bool IsOnScreen(int i, int top)

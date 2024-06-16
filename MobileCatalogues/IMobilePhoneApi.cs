@@ -24,7 +24,6 @@ namespace MobileCatalogues
         void SetAppRunning(bool value);
         string GetRunningApp();
         void SetRunningApp(string value);
-
         void PlayRingTone();
         void PlayNotificationTone();
         NPC GetCallingNPC();

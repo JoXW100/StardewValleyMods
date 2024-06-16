@@ -137,7 +137,9 @@ namespace MobilePhone
         {
             ModEntry.appRunning = value;
             if (!value)
+            {
                 ModEntry.runningApp = null;
+            }
         }
 
         public string GetRunningApp()
