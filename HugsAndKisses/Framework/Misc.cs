@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData.Characters;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -59,46 +58,35 @@ namespace HugsAndKisses.Framework
         public static int GetKissingFrame(string name)
         {
             if (Game1.getCharacterFromName(name)?.datable.Value == false && !Config.UseNonDateableNPCsKissFrames)
+            {
                 return 0;
+            }
+
             List<string> customFrames = Config.CustomKissFrames.Split(',').ToList();
             foreach (string nameframe in customFrames)
             {
-                if (nameframe.StartsWith(name + ":"))
+                if (nameframe.StartsWith(name + ":") && int.TryParse(nameframe.Substring(name.Length + 1), out int frame))
                 {
-                    if (int.TryParse(nameframe.Substring(name.Length + 1), out int frame))
                         return frame;
                 }
             }
 
-            switch (name)
+            return name switch
             {
-                case "Sam":
-                    return 36;
-                case "Penny":
-                    return 35;
-                case "Sebastian":
-                    return 40;
-                case "Alex":
-                    return 42;
-                case "Krobus":
-                    return 16;
-                case "Maru":
-                    return 28;
-                case "Emily":
-                    return 33;
-                case "Harvey":
-                    return 31;
-                case "Shane":
-                    return 34;
-                case "Elliott":
-                    return 35;
-                case "Leah":
-                    return 25;
-                case "Abigail":
-                    return 33;
-                default:
-                    return 28;
-            }
+                "Sam" => 36,
+                "Penny" => 35,
+                "Sebastian" => 40,
+                "Alex" => 42,
+                "Krobus" => 16,
+                "Maru" => 28,
+                "Emily" => 33,
+                "Harvey" => 31,
+                "Shane" => 34,
+                "Elliott" => 35,
+                "Leah" => 25,
+                "Abigail" => 33,
+                _ => 28,
+            };
         }
         public static void ShowHeart(NPC npc)
         {
@@ -125,7 +113,7 @@ namespace HugsAndKisses.Framework
 
         public static Dictionary<string, NPC> GetSpouses(Farmer farmer, int all)
         {
-            Dictionary<string, NPC> spouses = new Dictionary<string, NPC>();
+            Dictionary<string, NPC> spouses = new();
             if (all < 0)
             {
                 NPC ospouse = farmer.getSpouse();
@@ -159,13 +147,14 @@ namespace HugsAndKisses.Framework
 
             foreach (string name in f.friendshipData.Keys)
             {
-                if (f.friendshipData[name].IsEngaged())
+                var data = f.friendshipData[name];
+                if (data.IsEngaged())
                 {
-                    Monitor.Log($"{f.Name} is engaged to: {name} {f.friendshipData[name].CountdownToWedding} days until wedding");
-                    if (f.friendshipData[name].WeddingDate.TotalDays < new WorldDate(Game1.Date).TotalDays)
+                    Monitor.Log($"{f.Name} is engaged to: {name} {data.CountdownToWedding} days until wedding");
+                    if (data.WeddingDate.TotalDays < new WorldDate(Game1.Date).TotalDays)
                     {
                         Monitor.Log("invalid engagement: " + name);
-                        f.friendshipData[name].WeddingDate.TotalDays = new WorldDate(Game1.Date).TotalDays + 1;
+                        data.WeddingDate.TotalDays = new WorldDate(Game1.Date).TotalDays + 1;
                     }
                     if (f.spouse != name)
                     {
@@ -173,10 +162,11 @@ namespace HugsAndKisses.Framework
                         f.spouse = name;
                     }
                 }
-                if (f.friendshipData[name].IsMarried() && f.spouse != name)
+                if (data.IsMarried() && f.spouse != name)
                 {
                     //Monitor.Log($"{f.Name} is married to: {name}");
-                    if (f.spouse != null && f.friendshipData[f.spouse] != null && !f.friendshipData[f.spouse].IsMarried() && !f.friendshipData[f.spouse].IsEngaged())
+                    var spouseData = f.friendshipData[f.spouse];
+                    if (f.spouse != null && spouseData != null && !spouseData.IsMarried() && !spouseData.IsEngaged())
                     {
                         Monitor.Log("invalid ospouse, setting ospouse to " + name);
                         f.spouse = name;
@@ -194,7 +184,7 @@ namespace HugsAndKisses.Framework
             ModEntry.relationships.Clear();
             foreach (var (key, value) in Game1.characterData)
             {
-                ModEntry.relationships[key] = value.FriendsAndFamily;
+                ModEntry.relationships[key] = value.FriendsAndFamily ?? new Dictionary<string, string>();
             }
         }
 
@@ -255,9 +245,9 @@ namespace HugsAndKisses.Framework
 
             if (ModEntry.relationships.TryGetValue(npc1, out var relations) && relations.TryGetValue(npc2, out var relation))
             {
-                foreach (string r in roles)
+                foreach (string role in roles)
                 {
-                    if (relation.Contains(r))
+                    if (relation is not null && relation.Contains(role))
                     {
                         return true;
                     }
@@ -277,7 +267,7 @@ namespace HugsAndKisses.Framework
             }
         }
 
-        public static void ShuffleDic<T1, T2>(ref Dictionary<T1, T2> list)
+        public static void ShuffleDict<T1, T2>(ref Dictionary<T1, T2> list)
         {
             int n = list.Count;
             while (n-- > 1)

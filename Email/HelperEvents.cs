@@ -13,19 +13,20 @@ namespace Email
         {
             if (!Config.EnableMod)
                 return;
-            api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("aedenthorn.MobilePhone");
+            api = Helper.ModRegistry.GetApi<IMobilePhoneApi>("JoXW.MobilePhone");
             if (api != null)
             {
                 Texture2D appIcon;
                 bool success;
 
-                appIcon = Helper.Content.Load<Texture2D>(Path.Combine("assets", "app_icon.png"));
+                appIcon = Helper.ModContent.Load<Texture2D>(Path.Combine("assets", "app_icon.png"));
                 success = api.AddApp(Helper.ModRegistry.ModID, Helper.Translation.Get("email"), OpenEmailApp, appIcon);
                 Monitor.Log($"loaded email app successfully: {success}", LogLevel.Debug);
 
                 MakeTextures();
             }
         }
+
         public void Input_ButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             if (api.IsCallingNPC() || api.GetRunningApp() != Helper.ModRegistry.ModID)

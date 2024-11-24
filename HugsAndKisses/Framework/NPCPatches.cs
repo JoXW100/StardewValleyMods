@@ -1,5 +1,6 @@
 ﻿using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Quests;
 using System;
 
 namespace HugsAndKisses.Framework
@@ -22,7 +23,13 @@ namespace HugsAndKisses.Framework
         {
             try
             {
-                if (!Config.EnableMod || __instance.IsInvisible || __instance.isSleeping.Value || !who.canMove || who.checkForQuestComplete(__instance, -1, -1, who.ActiveObject, null, -1, 5) || who.pantsItem.Value?.ParentSheetIndex == 15 && (__instance.Name.Equals("Lewis") || __instance.Name.Equals("Marnie")) || __instance.Name.Equals("Krobus") && who.hasQuest("28") || !who.IsLocalPlayer)
+                if (!Config.EnableMod || __instance.IsInvisible || __instance.isSleeping.Value || !who.canMove || who.pantsItem.Value?.ParentSheetIndex == 15 && (__instance.Name.Equals("Lewis") || __instance.Name.Equals("Marnie")) || __instance.Name.Equals("Krobus") && who.hasQuest("28") || !who.IsLocalPlayer)
+                {
+                    return true;
+                }
+
+                var localInstance = __instance;
+                if (who.NotifyQuests((Quest quest) => quest.OnNpcSocialized(localInstance, true)) && Game1.dialogueUp)
                 {
                     return true;
                 }
@@ -68,6 +75,12 @@ namespace HugsAndKisses.Framework
                 if (who.ActiveObject is not null)
                 {
                     Monitor.Log($"Checking action failed, {__instance.Name} is holding an object.", LogLevel.Debug);
+                    return true;
+                }
+
+                if (who.isRidingHorse())
+                {
+                    Monitor.Log($"Checking action failed, {__instance.Name} is riding a horse.", LogLevel.Debug);
                     return true;
                 }
 

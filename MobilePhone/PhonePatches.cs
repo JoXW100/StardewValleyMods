@@ -27,6 +27,7 @@ namespace MobilePhone
             Helper = helper;
             Config = config;
         }
+
         public static bool Game1_pressSwitchToolButton_prefix()
         {
             if (ModEntry.phoneOpen && ModEntry.screenRect.Contains(Game1.getMousePosition()))
@@ -35,6 +36,7 @@ namespace MobilePhone
             }
             return true;
         }
+
         public static bool Farmer_addItemToInventory_prefix(Item item, ref Item __result)
         {
             if (ModEntry.isReminiscing)
@@ -45,6 +47,7 @@ namespace MobilePhone
             }
             return true;
         }
+
         public static bool Farmer_changeFriendship_prefix(int amount, NPC n)
         {
             if (ModEntry.isReminiscing)
@@ -54,6 +57,7 @@ namespace MobilePhone
             }
             return true;
         }
+        
         public static void GameLocation_resetLocalState_postfix(GameLocation __instance)
         {
             if (ModEntry.isReminiscing)
@@ -88,7 +92,7 @@ namespace MobilePhone
                 else
                 {
                     Monitor.Log($"Reminiscing during the day");
-                    return;
+                    /*
                     __instance.LightLevel = 1f;
                     //Game1.globalOutdoorLighting = 1f;
                     Game1.outdoorLight = Color.White;
@@ -109,10 +113,11 @@ namespace MobilePhone
                             }
                         }
                     }
-
+                    */
                 }
             }
         }
+
         public static bool Event_command_cutscene_prefix(ref Event @event, string[] args, EventContext context)
         {
             if (!ModEntry.isInviting)
@@ -206,6 +211,7 @@ namespace MobilePhone
             }
             return true;
         }
+        
         public static bool Event_endBehaviors_prefix(ref Event __instance, string[] args, GameLocation location)
         {
             if (ModEntry.isReminiscing)
@@ -216,6 +222,7 @@ namespace MobilePhone
             }
             return true;
         }
+        
         public static bool Event_namePet_prefix(Event __instance, string name)
         {
             if (ModEntry.isReminiscing)
@@ -255,6 +262,7 @@ namespace MobilePhone
             }
             return true;
         }
+        
         public static bool Event_skipEvent_prefix(Event __instance, ref Dictionary<string, Vector3> ___actorPositionsAfterMove)
         {
             if (ModEntry.isReminiscing)
@@ -306,24 +314,22 @@ namespace MobilePhone
             Game1.warpFarmer(locationRequest, Game1.player.TilePoint.X, Game1.player.TilePoint.Y, Game1.player.FacingDirection);
             return false;
         }
+        
         private static void RefreshView1()
         {
-            if (!(Game1.activeClickableMenu is CarpenterMenu))
+            if (Game1.activeClickableMenu is not CarpenterMenu menu)
                 return;
 
-            Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").SetValue(false);
-            Game1.player.viewingLocation.Value = null;
+            menu.onFarm = false;
             Helper.Reflection.GetMethod(Game1.activeClickableMenu, "resetBounds").Invoke(new object[] { });
-            Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "upgrading").SetValue(false);
-            Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "moving").SetValue(false);
-            Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "painting").SetValue(false);
-            Helper.Reflection.GetField<Building>(Game1.activeClickableMenu, "buildingToMove").SetValue(null);
-            Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "freeze").SetValue(false);
+            menu.Action = CarpenterMenu.CarpentryAction.None;
+            menu.buildingToMove = null;
+            menu.freeze = false;
+            menu.drawBG = true;
+            Game1.player.viewingLocation.Value = null;
             Game1.displayHUD = true;
             Game1.viewportFreeze = false;
             Game1.viewport.Location = ModEntry.callViewportLocation;
-            Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "drawBG").SetValue(true);
-            Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "demolishing").SetValue(false);
             Game1.displayFarmer = true;
             if (Game1.options.SnappyMenus)
             {
@@ -331,6 +337,7 @@ namespace MobilePhone
                 Game1.activeClickableMenu.snapToDefaultClickableComponent();
             }
         }
+        
         private static void RefreshView2()
         {
             if (!(Game1.activeClickableMenu is CarpenterMenu))
@@ -349,7 +356,10 @@ namespace MobilePhone
         private static async void robinPhoneConstructionMessage(IClickableMenu instance, CarpenterMenu.BlueprintEntry CurrentBlueprint)
         {
             Game1.player.forceCanMove();
-            string dialoguePath = "Data\\ExtraDialogue:Robin_" + (Helper.Reflection.GetField<bool>(instance, "upgrading").GetValue() ? "Upgrade" : "New") + "Construction";
+            
+            string contstructionType = CurrentBlueprint.IsUpgrade ? "Upgrade" : "New";
+            string dialoguePath = "Data\\ExtraDialogue:Robin_" + contstructionType + "Construction";
+            
             if (Utility.isFestivalDay(Game1.dayOfMonth + 1, Game1.season))
             {
                 dialoguePath += "_Festival";

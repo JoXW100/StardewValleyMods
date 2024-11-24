@@ -70,7 +70,6 @@ namespace MobileCatalogues
             Monitor.Log("Opening catalogue");
             // ShopMenuFacade
             DelayedOpen(new ShopMenu("Catalogue", GetAllWallpapersAndFloors()));
-            
         }
 
         public static void OpenFurnitureCatalogue()

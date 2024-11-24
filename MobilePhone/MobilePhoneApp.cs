@@ -129,6 +129,11 @@ namespace MobilePhone
                         }
                         Monitor.Log($"Adding {kvp.Key} to callable list");
                         NPC npc = Game1.getCharacterFromName(kvp.Key);
+                        if (npc is null)
+                        {
+                            continue;
+                        }
+
                         Texture2D portrait = npc.Sprite.Texture;
                         Rectangle sourceRect = npc.getMugShotSourceRect();
                         string name = Config.UseRealNamesInPhoneBook && npc.displayName != null ? npc.displayName : npc.Name;

@@ -44,7 +44,12 @@ namespace HugsAndKisses.Framework
             Misc.ShuffleList(ref characters);
 
             foreach (NPC npc1 in characters)
-            {
+            {   
+                if (npc1 is null)
+                {
+                    continue;
+                }
+
                 if (!npc1.datable.Value && !npc1.isRoommate() && !Config.AllowNonDateableNPCsToHugAndKiss)
                 {
                     continue;
@@ -57,7 +62,7 @@ namespace HugsAndKisses.Framework
 
                 foreach (NPC npc2 in characters)
                 {
-                    if (npc1.Name == npc2.Name)
+                    if (npc2 is null || npc1.Name == npc2.Name)
                     {
                         continue;
                     }
@@ -167,18 +172,6 @@ namespace HugsAndKisses.Framework
             string name = npc.Name;
             int spouseFrame = Misc.GetKissingFrame(name);
             bool facingRight = Misc.GetFacingRight(name);
-
-            List<string> customFrames = Config.CustomKissFrames.Split(',').ToList();
-            foreach (string nameframe in customFrames)
-            {
-                if (nameframe.StartsWith(name + ":"))
-                {
-                    int.TryParse(nameframe.Substring(name.Length + 1), out spouseFrame);
-                    break;
-                }
-            }
-
-
             bool right = npc.position.X < midpoint.X;
             if (npc.position.Value == midpoint)
             {
@@ -193,11 +186,12 @@ namespace HugsAndKisses.Framework
 
             int offset = 24;
             if (right)
-                offset *= -1;
+            {
+                offset = -offset;
+            }
 
+            const int delay = 1000;
             npc.position.Value = new Vector2(midpoint.X + offset, midpoint.Y);
-
-            int delay = 1000;
             npc.movementPause = delay;
             npc.Sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>
             {
