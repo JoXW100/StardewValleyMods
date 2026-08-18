@@ -1,7 +1,9 @@
 ﻿using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Quests;
+using System.Collections.Generic;
 using System;
+using System.Reflection;
 
 namespace HugsAndKisses.Framework
 {
@@ -48,10 +50,13 @@ namespace HugsAndKisses.Framework
                 }
 
                 __instance.faceDirection(-3);
+                List<FarmerSprite.AnimationFrame> previousAnimation = null;
+                int? previousAnimationIndex = null;
                 if (__instance.Sprite.CurrentAnimation is not null)
                 {
-                    Monitor.Log($"Checking action failed, {__instance.Name} is in an animation.", LogLevel.Debug);
-                    return true;
+                    previousAnimation = new List<FarmerSprite.AnimationFrame>(__instance.Sprite.CurrentAnimation);
+                    previousAnimationIndex = TryGetAnimationIndex(__instance.Sprite);
+                    Monitor.Log($"{__instance.Name} is in an animation. It will be restored after kissing/hugging.", LogLevel.Debug);
                 }
 
                 if (__instance.hasTemporaryMessageAvailable())
@@ -68,8 +73,8 @@ namespace HugsAndKisses.Framework
 
                 if (__instance.isMoving())
                 {
-                    Monitor.Log($"Checking action failed, {__instance.Name} is moving.", LogLevel.Debug);
-                    return true;
+                    Monitor.Log($"Checking action may continue despite {__instance.Name} moving.", LogLevel.Debug);
+                    //return true;
                 }
 
                 if (who.ActiveObject is not null)
@@ -110,6 +115,34 @@ namespace HugsAndKisses.Framework
                     Kissing.PlayerNPCHug(who, __instance);
                 }
 
+                if (previousAnimation is not null)
+                {
+                    NPC npc = __instance;
+                    string name = __instance.Name;
+                    int restoreDelayMs = Game1.IsMultiplayer ? 1000 : 10;
+                    DelayedAction.functionAfterDelay(() =>
+                    {
+                        try
+                        {
+                            if (npc?.Sprite is null)
+                            {
+                                return;
+                            }
+
+                            npc.Sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>(previousAnimation));
+                            if (previousAnimationIndex.HasValue)
+                            {
+                                TrySetAnimationIndex(npc.Sprite, previousAnimationIndex.Value);
+                            }
+                            npc.Sprite.UpdateSourceRect();
+                        }
+                        catch (Exception ex)
+                        {
+                            Monitor.Log($"Failed to restore animation for {name}:\n{ex}", LogLevel.Warn);
+                        }
+                    }, restoreDelayMs + 10);
+                }
+
                 __result = true;
                 return false;
             }
@@ -118,6 +151,43 @@ namespace HugsAndKisses.Framework
                 Monitor.Log($"Failed in {nameof(NPC_checkAction_Prefix)}:\n{ex}", LogLevel.Error);
             }
             return true;
+        }
+
+        private static int? TryGetAnimationIndex(AnimatedSprite sprite)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+            FieldInfo field = sprite.GetType().GetField("currentAnimationIndex", flags);
+            if (field?.FieldType == typeof(int) && field.GetValue(sprite) is int fieldValue)
+            {
+                return fieldValue;
+            }
+
+            PropertyInfo property = sprite.GetType().GetProperty("currentAnimationIndex", flags);
+            if (property?.PropertyType == typeof(int) && property.CanRead && property.GetValue(sprite) is int propertyValue)
+            {
+                return propertyValue;
+            }
+
+            return null;
+        }
+
+        private static void TrySetAnimationIndex(AnimatedSprite sprite, int index)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+            FieldInfo field = sprite.GetType().GetField("currentAnimationIndex", flags);
+            if (field?.FieldType == typeof(int))
+            {
+                field.SetValue(sprite, index);
+                return;
+            }
+
+            PropertyInfo property = sprite.GetType().GetProperty("currentAnimationIndex", flags);
+            if (property?.PropertyType == typeof(int) && property.CanWrite)
+            {
+                property.SetValue(sprite, index);
+            }
         }
     }
 }
