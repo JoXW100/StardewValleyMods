@@ -73,8 +73,8 @@ namespace HugsAndKisses.Framework
 
                 if (__instance.isMoving())
                 {
-                    Monitor.Log($"Checking action failed, {__instance.Name} is moving.", LogLevel.Debug);
-                    return true;
+                    Monitor.Log($"Checking action may continue despite {__instance.Name} moving.", LogLevel.Debug);
+                    //return true;
                 }
 
                 if (who.ActiveObject is not null)
